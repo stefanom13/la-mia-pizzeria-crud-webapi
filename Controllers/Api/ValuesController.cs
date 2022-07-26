@@ -14,7 +14,7 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers.Api
         {
             using (PizzaContext context = new PizzaContext())
             {
-                IQueryable<Pizza> pizze = context.Pizze.Include(p => p.Categorie);
+                IQueryable<Pizza> pizze = context.Pizze.Include(pizze => pizze.Categorie);
                 return Ok(pizze.ToList());
             }
         }

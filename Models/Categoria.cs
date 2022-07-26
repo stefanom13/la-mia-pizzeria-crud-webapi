@@ -15,7 +15,7 @@ using System.Text.Json.Serialization;
         public int Id { get; set; }
         public string NomeCategoria { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public List<Pizza> Pizze { get; set; }
         public Categoria()
         {
