@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace la_mia_pizzeria_mvc_refactoring.Controllers.Api
 {
-    [Route("api/[controller]")]
+    [Route("api/pizza")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
