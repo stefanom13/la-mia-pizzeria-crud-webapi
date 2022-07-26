@@ -1,7 +1,14 @@
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+void AddJsonOptions(Func<object, object> value)
+{
+    throw new NotImplementedException();
+};
 
 var app = builder.Build();
 
