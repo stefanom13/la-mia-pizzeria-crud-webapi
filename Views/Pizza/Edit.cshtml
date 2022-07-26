@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Modifichiamo le nostre SuperPizze";
+}
+<h3>@ViewData["Title"]</h3>
+@model PizzaCategorie
+
+
+<div class="container">
+    <form asp-controller="Pizza" asp-action="Edit" asp-route-id="@Model.Pizza.Id" method="post">
+        @Html.AntiForgeryToken()
+         <div class="mb-3">
+            <label for="NomePizza">Nome: </label>
+            <input id="NomePizza" asp-for="Pizza.NomePizza" class="d-block w-100" />            
+            <span asp-validation-for="Pizza.NomePizza" class="text-danger"></span>
+        </div>        
+        <div class="mb-3">
+            <label for="Prezzo">Prezzo: </label>
+            <input type="number" id="Prezzo" asp-for="Pizza.Prezzo" class="d-block w-100" />    
+            <span asp-validation-for="Pizza.Prezzo" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="Descrizione">Descrizione: </label>
+            <textarea id="Descrizione" asp-for="Pizza.Descrizione" class="d-block w-100" ></textarea>  
+            <span asp-validation-for="Pizza.Descrizione" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="PathImage">Immagine: </label>
+            <input id="PathImage" asp-for="Pizza.PathImage" class="d-block w-100" />            
+        </div>
+
+        @* INPUT CATEGORia *@
+        <div class="mb-3">
+            <label for="Category">Categoria: </label>
+            <select asp-for="Pizza.CategoriaId">    
+                <option value=""></option>
+                @foreach(Categoria categoria in Model.Categorie)
+                {
+                    @if(Model.Pizza.CategoriaId == categoria.Id)
+                    {
+                        <option value="@categoria.Id" selected>@categoria.NomeCategoria</option>
+                    }
+                    else
+                    {
+                        <option value="@categoria.Id">@categoria.NomeCategoria</option>
+                    }
+                }
+            </select>                        
+            
+        </div>
+        <div class="text-end">
+            <button class=" btn btn-success" type="submit">Salva Modifiche</button>
+        </div>
+    </form>
+</div>

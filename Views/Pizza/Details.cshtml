@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Benvenuto nei dettagli delle nostre pizze";
+}
+
+<div class="text-center">
+    <h1>Qui troveremo tutti i dettagli delle nostre pizze</h1>
+</div>
+
+
+@model Pizza
+
+
+<div class="container text-dark">
+    <h2>@Model.NomePizza</h2>
+    <div class="row">
+        <div class="w-50">
+            <img class="w-100" src="@Model.PathImage"/>
+        </div>
+        <div class="w-50">
+            <h3>Descrizione</h3>
+            <p>@Model.Descrizione</p>
+            <h3>Prezzo</h3>
+            <span>@Model.Prezzo &euro;</span>
+             <h3>Categoria</h3>
+              <span>@Model.Categorie.NomeCategoria</span>
+              <div>
+                  <h3>Ingredienti</h3>
+                 @if(Model.Ingredienti.Count() > 0)
+                {
+                    foreach(Ingredienti ing in Model.Ingredienti)
+                    {                
+                        <span> @ing.NomeIngrediente</span>
+                    }
+                }
+                else
+                {
+                    <span>Per il momento non ci sono ingredienti</span>
+                }
+              </div>
+
+         </div>
+    <a  class="btn btn-danger mt-2 " href="@Url.Action("Index","Pizza")">Indietro</a>
+</div>
+
+
+
+ 
+
+
+
+
+
+
