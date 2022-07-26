@@ -1,6 +1,7 @@
 ﻿using la_mia_pizzeria_mvc_refactoring.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace la_mia_pizzeria_mvc_refactoring.Controllers.Api
 {
@@ -13,7 +14,7 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers.Api
         {
             using (PizzaContext context = new PizzaContext())
             {
-                IQueryable<Pizza> pizze = context.Pizze;
+                IQueryable<Pizza> pizze = context.Pizze.Include(p => p.Categorie);
                 return Ok(pizze.ToList());
             }
         }
