@@ -16,6 +16,10 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers
         public IActionResult Index()
         {
             return View();
+        } 
+        public IActionResult Details(int id)
+        {
+            return View(id);
         }
 
         public IActionResult Privacy()
@@ -27,6 +31,12 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public ActionResult Delete(int id)
+        {
+            
+            return RedirectToAction("Index");
+            
         }
     }
 }
