@@ -7,29 +7,29 @@
 @model int
 
 <div class="container text-dark">
-    <div class="detail">
+    <div class="ContainerDetail">
 
     </div>
     <a  class="btn btn-danger mt-2 " href="@Url.Action("Index","Home")">Indietro</a>
 </div>
 
-@section Scripts {
-    
+
     <script type="text/javascript">
     
         const id = @Model;
         
-        loadPizza(id);
-        function loadPizza(n) {
-            axios.get(`/api/pizza/${n}`).then(res => { 
-                //console.log("ok", res.data);
+       loadPizza(id);
+        function loadPizza(id) {
+            axios.get(`/api/pizza/${id}`).then(res => { 
+                console.log("ok", res.data);
+                debugger
                 const pizza = res.data;
 
-                if (pizza = null){
-                    document.querySelector('.detail').innerHTML = "";
+                if (pizza == null){
+                    document.querySelector('.ContainerDetail').innerHTML = "";
                 }
                 else{
-                    document.querySelector('.detail').innerHTML +=
+                    document.querySelector('.ContainerDetail').innerHTML +=
                     `
                         <div class="row">
                             <div>
@@ -47,7 +47,7 @@
              }).catch(e => console.log(e));
         }
     </script>
-}
+
 
  
 
