@@ -8,23 +8,29 @@
 </div>
 <div class="container">
     <div class="jumbo"></div>
+     <div class="py-2 col-12">
+            <input id="search-input" type="text" placeholder="Inserisci qui la pizza" onkeyup="search"></input>
+      </div>
     <div class="containerPizzeJson d-flex flex-wrap">
         <h1 class="col-12">Ecco qui le nostre pizze in formato Json</h1>
-        <div class="py-2 col-12">
-            <input type="text" placeholder="Inserisci qui la pizza"></input>
-        </div>
     </div>
 </div>
 
 
 <script type="text/javascript" language="javascript">
-    //function loadList() {
-        axios.get('/api/pizza').then((response) => {
-
-            // console.log(response);
+      document.getElementById("search-input").addEventListener("keyup", search);
+      function search(event) {
+        var value = document.getElementById("search-input").value;
+        loadList(value);
+     }
+    loadList(null);
+    function loadList(search) {
+        axios.get('/api/pizza',{ params: {search:search}}).then((response) => {
+             console.log(response);
             if (response.status == 200) {
+                document.querySelector('.containerPizzeJson').innerHTML = "";
                 response.data.forEach(pizza => {
-                   // console.log('pizza', pizza);
+                    console.log('pizza', pizza);
                     document.querySelector('.containerPizzeJson').innerHTML +=
                        `
                         <div class="card col-3 text-center gx-3" >
@@ -43,5 +49,5 @@
         }).catch(e => {
             console.log(e);
         });
-    //}
+    }
 </script>

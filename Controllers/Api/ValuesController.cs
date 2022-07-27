@@ -10,12 +10,16 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers.Api
     public class ValuesController : ControllerBase
     {
         [HttpGet]
-        public IActionResult GetUtenti()
+        public IActionResult GetUtenti(string? search)
         {
             using (PizzaContext context = new PizzaContext())
             {
-                IQueryable<Pizza> pizze = context.Pizze.Include(pizze => pizze.Categorie);
-                return Ok(pizze.ToList());
+                IQueryable<Pizza> pizza = context.Pizze.Include(pizza => pizza.Categorie);
+                if (search != null && search != "")
+                {
+                    pizza = pizza.Where(p => p.NomePizza.Contains(search));
+                }
+                return Ok(pizza.ToList());
             }
         }
     }
