@@ -4,17 +4,50 @@
     <h1>Qui troveremo tutti i dettagli delle nostre pizze</h1>
 </div>
 
-
-
-
+@model int
 
 <div class="container text-dark">
-    <h2>Pizza Id</h2>
- 
+    <div class="detail">
+
+    </div>
     <a  class="btn btn-danger mt-2 " href="@Url.Action("Index","Home")">Indietro</a>
 </div>
 
+@section Scripts {
+    
+    <script type="text/javascript">
+    
+        const id = @Model;
+        
+        loadPizza(id);
+        function loadPizza(n) {
+            axios.get(`/api/pizza/${n}`).then(res => { 
+                //console.log("ok", res.data);
+                const pizza = res.data;
 
+                if (pizza = null){
+                    document.querySelector('.detail').innerHTML = "";
+                }
+                else{
+                    document.querySelector('.detail').innerHTML +=
+                    `
+                        <div class="row">
+                            <div>
+                                <img src="${pizza.pathImage}"/>
+                            </div>
+                            <div class="flex-column">
+                                <h2>${pizza.nomePizza}</h2>
+                                <p>${pizza.descrizione}</p>
+                                <span>categoria: ${pizza.categorie.nomeCategoria}</span>
+                                <span>prezzo: ${pizza.prezzo} euro</span>
+                            </div>
+                        </div>
+                    `;
+                }
+             }).catch(e => console.log(e));
+        }
+    </script>
+}
 
  
 

@@ -22,5 +22,22 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers.Api
                 return Ok(pizza.ToList());
             }
         }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            using (PizzaContext ctx = new PizzaContext())
+            {
+                Pizza pizza = ctx.Pizze.Where(p => p.Id == id).Include(p => p.Categorie).FirstOrDefault();
+
+                if (pizza == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(pizza);
+            }
+        }
     }
 }
+
