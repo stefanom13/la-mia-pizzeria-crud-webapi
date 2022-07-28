@@ -22,7 +22,7 @@
         function loadPizza(id) {
             axios.get(`/api/pizza/${id}`).then(res => { 
                 console.log("ok", res.data);
-                debugger
+                //debugger
                 const pizza = res.data;
 
                 if (pizza == null){
@@ -38,8 +38,9 @@
                             <div class="flex-column">
                                 <h2>${pizza.nomePizza}</h2>
                                 <p>${pizza.descrizione}</p>
-                                <span>categoria: ${pizza.categorie.nomeCategoria}</span>
-                                <span>prezzo: ${pizza.prezzo} euro</span>
+                                <p>Categoria: ${pizza.categorie.nomeCategoria}</p>
+                                <p>Ingredienti: ${pizza.ingredienti.nomeIngrediente}</p>
+                                <p>Prezzo: ${pizza.prezzo} euro</p>
                             </div>
                         </div>
                     `;

@@ -18,6 +18,7 @@ namespace la_mia_pizzeria_mvc_refactoring.Database
 
         public DbSet<Pizza> Pizze { get; set; }
         public DbSet<Ingredienti> Ingrediente { get; set; }
+        public DbSet<Message> Messaggi { get; set; }
 
          public DbSet<Categoria> Categorie { get; set; }
 
