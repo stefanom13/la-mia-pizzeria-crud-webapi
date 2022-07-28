@@ -27,7 +27,7 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers
             return View();
         } public IActionResult Contact()
         {
-            return View();
+            return View("Contact");
         }
 
        

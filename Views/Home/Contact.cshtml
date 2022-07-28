@@ -1,17 +1,18 @@
-﻿<h1>Dì la tua!</h1>
+﻿
+<h1>Dì la tua!</h1>
 
 <div>
     <div class="col-12 mt-5">
         <h2>Contattaci!</h2>
-        <form onsubmit="Contattaci(event)">
+        <form id="contact-form" onsubmit="Contattaci(event)">
             <div class="mb-3">
                 <label for="contact-email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="contact-email" />
+                <input type="email" class="form-control" id="contact-email" required />
             </div>
 
             <div class="mb-3">
                 <label for="contact-name" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="contact-name" />
+                <input type="text" class="form-control" id="contact-name" required />
             </div>
 
             <div class="mb-3">
@@ -31,10 +32,10 @@
 function Contattaci(e) {
     e.preventDefault();
     axios.post('/api/messages', {
-        Email: document.querySelector('#contact-email').value,
-        Nome: document.querySelector('#contact-name').value,
-        titolo: document.querySelector('#contact-title').value,
-        TestoMessaggio: document.querySelector('#contact-text').value,
+        email: document.querySelector('#contact-email').value,
+        name: document.querySelector('#contact-name').value,
+        title: document.querySelector('#contact-title').value,
+        text: document.querySelector('#contact-text').value,
     }).then(function(response) {
         document.querySelector('#contact-email').value = "";
         document.querySelector('#contact-name').value = "";

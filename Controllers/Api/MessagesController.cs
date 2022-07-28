@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using la_mia_pizzeria_mvc_refactoring.Database;
+using la_mia_pizzeria_mvc_refactoring.Models;
 
 namespace la_mia_pizzeria_mvc_refactoring.Controllers.Api
 {
@@ -23,10 +24,24 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers.Api
         // POST: api/Messages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public IActionResult Pizza( [FromBody] Message message)
+        public IActionResult Post( [FromBody] Message message)
         {
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity(ModelState);
+            }
+            else
+            {
+                using (PizzaContext context = new PizzaContext())
+                {
+                    _context.Messaggi.Add(message);
+                    _context.SaveChanges();
 
-            return Ok();
+                    return Ok();
+                }
+               
+            }
+           
         }
 
        
