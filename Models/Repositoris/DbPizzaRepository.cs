@@ -48,8 +48,35 @@ namespace la_mia_pizzeria_mvc_refactoring.Models.Repositoris
                 return posts.ToList();
             }
         }
-
-
+        public void Edit(Pizza post, List<string> selectedTags)
+        {
+            using (PizzaContext context = new PizzaContext())
+            {
+                // dobbiamo fare l'attach perchè altrimenti ci sono problemi
+                // nel salvataggio dei tag
+                // facendo però l'attach è necessario prima aggiornare anche l'entity
+                // della categoria, avere l'id aggiornato non basta.
+                // l'attach infatti sovrascrive il nuovo valore di id categoria
+                // con quello precedente
+                post.Categorie = context.Categorie.Where(m => m.Id ==
+                post.CategoriaId).FirstOrDefault();
+                context.Attach(post);
+                // rimuoviamo i tag e inseriamo i nuovi
+                post.Ingredienti.Clear();
+                if (selectedTags != null)
+                {
+                    foreach (string selectedTagId in selectedTags)
+                    {
+                        int selectedIntTagId = int.Parse(selectedTagId);
+                        Ingredienti tag = context.Ingrediente.Where(m => m.Id == selectedIntTagId).FirstOrDefault();
+                        post.Ingredienti.Add(tag);
+                    }
+                }
+                context.Update(post);
+                context.SaveChanges();
+            }
+        }
     }
 
 }
+

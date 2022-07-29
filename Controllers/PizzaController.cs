@@ -95,7 +95,101 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers
             return RedirectToAction("Index");
         }
 
+        //GET: PizzaController/Update
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            using (PizzaContext context = new PizzaContext())
+            {
+                // aggiungiamo include perchè vogliamo caricare anche i Tag del Post
+                Pizza postToEdit = pizzaRepository.GetById(id);
+                if (postToEdit == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    List<Categoria> categories = context.Categorie.ToList();
+                    PizzaCategorie model = new PizzaCategorie();
+                    model.Pizza = postToEdit;
+                    model.Categorie = categories;
+                    List<Ingredienti> tags = context.Ingrediente.ToList();
+                    List<SelectListItem> listTags = new List<SelectListItem>();
+                    foreach (Ingredienti tag in tags)
+                    {
+                        listTags.Add(
+                        new SelectListItem()
+                        {
+                            Text = tag.NomeIngrediente,
+                            Value = tag.Id.ToString(),
+    // dobbiamo settare come selezionati i tag che sono presenti nel Post
+                            Selected = postToEdit.Ingredienti.Any(m => m.Id == tag.Id)
+                        });
+                    }
+                    model.ListaIngredienti = listTags;
+                    return View(model);
+                }
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, PizzaCategorie data)
+        {
+            if (!ModelState.IsValid)
+            {
+                using (PizzaContext context = new PizzaContext())
+                {
+                    // In caso di errore di validazione dobbiamo restituire ogni volta il model
+                    // popolato con la lista delle categorie, perchè questi dati non vengono
+                    // passati dal post e restituendolo direttamente la property Categories
+                    // sarebbe null e la pagina darebbe errore
+                    List<Categoria> categories = context.Categorie.ToList();
+                    data.Categorie = categories;
+                    List<Ingredienti> tags = context.Ingrediente.ToList();
+                    List<SelectListItem> listTags = new List<SelectListItem>();
+                    foreach (Ingredienti tag in tags)
+                    {
+                        listTags.Add(new SelectListItem() { Text = tag.NomeIngrediente, Value = tag.Id.ToString() });
+                    }
+                    data.ListaIngredienti = listTags;
+                    return View("Edit", data);
+                }
+            }
+            // dobbiamo caricare anche i Tag collegati al post
+            Pizza postToEdit = pizzaRepository.GetById(id);
+            if (postToEdit != null)
+            {
+                // aggiorniamo i campi con i nuovi valori
+                postToEdit.NomePizza = data.Pizza.NomePizza;
+                postToEdit.Descrizione = data.Pizza.Descrizione;
+                postToEdit.PathImage = data.Pizza.PathImage;
+                postToEdit.Prezzo = data.Pizza.Prezzo;
+                postToEdit.CategoriaId = data.Pizza.CategoriaId;
+                pizzaRepository.Edit(postToEdit, data.SelezionaIngrediente);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
+        //GET: PizzaController/Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            Pizza postToDelete = pizzaRepository.GetById(id);
+            if (postToDelete != null)
+            {
+                pizzaRepository.Delete(postToDelete);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
         // GET: HomeController1
         //public ActionResult Index()
