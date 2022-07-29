@@ -25,19 +25,91 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers
         }
 
 
+        //GET: PizzaController/Details
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            // aggiungiamo l'include di Tags
+            Pizza postFound = pizzaRepository.GetById(id);
+            if (postFound == null)
+            {
+                return NotFound($"Il post con id {id} non è stato trovato");
+            }
+            else
+            {
+                return View("Details", postFound);
+            }
+        }
+
+        //GET: PizzaController/Create
+        [HttpGet]
+        public IActionResult Create()
+        {
+            using (PizzaContext context = new PizzaContext())
+            {
+                List<Categoria> categories = context.Categorie.ToList();
+                List<Ingredienti> tags = context.Ingrediente.ToList();
+                PizzaCategorie model = new PizzaCategorie();
+                model.Pizza = new Pizza();
+                model.Categorie = categories;
+                List<SelectListItem> listTags = new List<SelectListItem>();
+                foreach (Ingredienti tag in tags)
+                {
+                    listTags.Add(new SelectListItem() { Text = tag.NomeIngrediente, Value = tag.Id.ToString() });
+                }
+                model.ListaIngredienti = listTags;
+                return View("Create", model);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(PizzaCategorie data)
+        {
+            if (!ModelState.IsValid)
+            {
+                using (PizzaContext context = new PizzaContext())
+                {
+                    // In caso di errore di validazione dobbiamo restituire ogni volta il model
+                    // popolato con la lista delle categorie, perchè questi dati non vengono
+                    // passati dal post e restituendolo direttamente la property Categories
+                    // sarebbe null e la pagina darebbe errore
+                    List<Categoria> categories = context.Categorie.ToList();
+                    List<Ingredienti> tags = context.Ingrediente.ToList();
+                    data.Categorie = categories;
+                    List<SelectListItem> listTags = new List<SelectListItem>();
+                    foreach (Ingredienti tag in tags)
+                    {
+                        listTags.Add(new SelectListItem() { Text = tag.NomeIngrediente, Value = tag.Id.ToString() });
+                    }
+                    data.ListaIngredienti = listTags;
+                    return View("Create", data);
+                }
+            }
+            Pizza postToCreate = new Pizza();
+            postToCreate.NomePizza = data.Pizza.NomePizza;
+            postToCreate.Descrizione = data.Pizza.Descrizione;
+            postToCreate.PathImage = data.Pizza.PathImage;
+            postToCreate.Prezzo = data.Pizza.Prezzo;
+            postToCreate.CategoriaId = data.Pizza.CategoriaId;
+            pizzaRepository.Create(postToCreate, data.SelezionaIngrediente);
+            return RedirectToAction("Index");
+        }
+
+
+
         // GET: HomeController1
         //public ActionResult Index()
         //{
-           // using (PizzaContext db = new PizzaContext())
-           // {
-             //   IQueryable<Pizza> listPizza = db.Pizze.Include(piz => piz.Categorie);
-               // // List<Pizza> listPizza = db.Pizzas.OrderBy(pizza => pizza.Id).ToList<Pizza>();
-               // if (listPizza == null)
-               // {
-                  ///  return NotFound("Pizze non presenti");
-               // }
-                //return View("Index", listPizza.ToList());
-            //}
+        // using (PizzaContext db = new PizzaContext())
+        // {
+        //   IQueryable<Pizza> listPizza = db.Pizze.Include(piz => piz.Categorie);
+        // // List<Pizza> listPizza = db.Pizzas.OrderBy(pizza => pizza.Id).ToList<Pizza>();
+        // if (listPizza == null)
+        // {
+        ///  return NotFound("Pizze non presenti");
+        // }
+        //return View("Index", listPizza.ToList());
+        //}
         //}
 
         // GET: HomeController1/Details/5
@@ -72,13 +144,13 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers
         //        model.Pizza = new Pizza();
         //        model.Categorie = categoria;
         //        model.ListaIngredienti = NuovoMetodo();
-                
-                
+
+
         //        return View(model);
         //    }
         //}
 
-        
+
 
         //// POST: HomeController1/Create
         //[HttpPost]
@@ -129,7 +201,7 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers
         //            db.Pizze.Add(newPizza);
 
         //            db.SaveChanges();
-                   
+
         //        }
         //    return RedirectToAction("Index");
 
@@ -207,7 +279,7 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers
         //}
 
         //// GET: HomeController1/Delete/5
-      
+
         //// POST: HomeController1/Delete/5
         //[HttpPost]
         //[ValidateAntiForgeryToken]
