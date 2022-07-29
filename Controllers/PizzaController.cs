@@ -1,4 +1,6 @@
 ﻿using la_mia_pizzeria_mvc_refactoring.Database;
+
+using la_mia_pizzeria_mvc_refactoring.Models.Repositoris;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,6 +10,13 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers
 {
     public class PizzaController : Controller
     {
+        private DbPizzaRepository? PizzaRepository;
+
+        public PizzaController()
+        {
+            this.PizzaRepository = new DbPizzaRepository();
+        }
+
         // GET: HomeController1
         public ActionResult Index()
         {

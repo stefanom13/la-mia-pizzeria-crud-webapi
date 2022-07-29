@@ -43,7 +43,15 @@ namespace la_mia_pizzeria_mvc_refactoring.Controllers.Api
             }
            
         }
+        //[HttpGet]
+        //public IActionResult Get()
+       // {
+            //using (PizzaContext db = new PizzaContext())
+           // {
+              //  IQueryable<Message> messagi = db.Messaggi;
 
-       
+             //   return Ok(messagi.ToList());
+           // }
+      //  }
     }
 }
